@@ -2,7 +2,7 @@
 
 import pytest
 import moto
-from app import client
+from rdsslib.kinesis import client
 
 
 class TestKinesisClient(object):
