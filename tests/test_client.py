@@ -2,6 +2,7 @@
 
 import pytest
 import moto
+from moto import mock_kinesis
 from rdsslib.kinesis import client
 import json
 
@@ -35,6 +36,7 @@ class TestKinesisClient(object):
         """Return payload serialised to JSON formatted str"""
         return json.dumps(payload)
 
+    @mock_kinesis
     def test_write_and_read_messages(self, serialised_payload, kc):
         kc.client.create_stream(StreamName='test_stream', ShardCount=2)
         kc.write_message(['test_stream'], serialised_payload, 1)
