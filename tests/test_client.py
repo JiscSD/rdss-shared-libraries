@@ -3,6 +3,7 @@
 import pytest
 import moto
 from rdsslib.kinesis import client
+import json
 
 
 class TestKinesisClient(object):
@@ -29,10 +30,18 @@ class TestKinesisClient(object):
             }
         }
 
-    def test_raises_max_retries_exceeded(self, payload, kc):
-        """Test that client raises MaxRetriesExceededException."""
-        with pytest.raises(client.MaxRetriesExceededException):
-            kc.write_message(['no_stream'], payload, 1)
+    @pytest.fixture
+    def serialised_payload(self, payload):
+        """Return payload serialised to JSON formatted str"""
+        return json.dumps(payload)
+
+    def test_write_and_read_messages(self, serialised_payload, kc):
+        kc.client.create_stream(StreamName='test_stream', ShardCount=2)
+        kc.write_message(['test_stream'], serialised_payload, 1)
+        messages = kc.read_messages('test_stream')
+        sample_message = next(messages)
+        assert sample_message['SequenceNumber'] == '1'
+        assert json.loads(sample_message['Data'].decode('utf-8'))['messageBody'] == {'some' : 'message'}
 
     def teardown(self):
         """Stop mocking kinesis."""
