@@ -38,7 +38,7 @@ class TestStreamWriter(object):
 
     def test_put_stream(self, serialised_payload, client):
         logger = logging.getLogger()
-        s_writer = writer.StreamWriter(logger)
+        s_writer = writer.StreamWriter(client=client, logger=logger)
         s_writer.client.create_stream(StreamName='test_stream', ShardCount=1)
         s_writer.put_stream('test_stream', serialised_payload, 1)
         records = get_records(s_writer.client, 'test_stream')
