@@ -1,3 +1,4 @@
+import boto3
 import json
 from .kinesis_helpers import get_records
 import logging
@@ -13,6 +14,10 @@ class TestStreamWriter(object):
         """Start mocking kinesis."""
         self.mock = moto.mock_kinesis()
         self.mock.start()
+
+    @pytest.fixture
+    def client(self):
+        return boto3.client('kinesis')
 
     @pytest.fixture
     def payload(self):
@@ -31,7 +36,7 @@ class TestStreamWriter(object):
         """Return payload serialised to JSON formatted str"""
         return json.dumps(payload)
 
-    def test_put_stream(self, serialised_payload):
+    def test_put_stream(self, serialised_payload, client):
         logger = logging.getLogger()
         s_writer = writer.StreamWriter(logger)
         s_writer.client.create_stream(StreamName='test_stream', ShardCount=1)

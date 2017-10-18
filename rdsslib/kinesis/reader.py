@@ -3,8 +3,8 @@ import time
 
 
 class StreamReader(object):
-    def __init__(self):
-        self.client = boto3.client('kinesis')
+    def __init__(self, client):
+        self.client = client
 
     def read_stream(self, stream_name, seq_number=None):
         """Listen for messages from a stream and yield response."""

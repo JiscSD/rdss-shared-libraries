@@ -6,9 +6,9 @@ import time
 class StreamWriter(object):
     """ Wraps boto3 to write to a stream"""
 
-    def __init__(self, logger):
+    def __init__(self, client, logger):
+        self.client = client
         self.logger = logger
-        self.client = boto3.client('kinesis')
 
     def put_stream(self, stream_name, payload, max_attempts):
         """Attempt to put the payload in the provided stream name."""

@@ -1,3 +1,4 @@
+import boto3
 import json
 import moto
 import pytest
@@ -11,6 +12,10 @@ class TestStreamReader(object):
         """Start mocking kinesis."""
         self.mock = moto.mock_kinesis()
         self.mock.start()
+
+    @pytest.fixture
+    def client(self):
+        return boto3.client('kinesis')
 
     @pytest.fixture
     def payload(self):
@@ -29,8 +34,8 @@ class TestStreamReader(object):
         """Return payload serialised to JSON formatted str"""
         return json.dumps(payload)
 
-    def test_read_stream_returns_message(self, serialised_payload):
-        s_reader = reader.StreamReader()
+    def test_read_stream_returns_message(self, serialised_payload, client):
+        s_reader = reader.StreamReader(client=client)
         s_reader.client.create_stream(StreamName='test_stream', ShardCount=1)
         s_reader.client.put_record(StreamName='test_stream',
                                    Data = serialised_payload,
