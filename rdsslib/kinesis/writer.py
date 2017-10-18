@@ -1,4 +1,3 @@
-import boto3
 from .errors import MaxRetriesExceededException
 import time
 
