@@ -25,11 +25,11 @@ class TestEnhancedKinesisClient(KinesisMixin):
     """Test Enhanced Kinesis Client"""
 
     def test_enhanced_kinesis_client_handles_valid_json(self, serialised_payload):
-        test_client = factory.kinesis_client_factory('content_router')
-        test_client.writer.client.create_stream(StreamName='test_stream', ShardCount=1)
-        test_client.write_message(['test_stream'], serialised_payload, 1)
-        msg_generator = test_client.read_messages('test_stream')
-        msg = next(msg_generator)
-        print(msg)
-
+        s_client = factory.kinesis_client_factory('content_router')
+        s_client.writer.client.create_stream(StreamName='test_stream', ShardCount=1)
+        s_client.write_message(['test_stream'], serialised_payload, 1)
+        records = s_client.read_messages('test_stream')
+        msg = next(records)
+        decoded = json.loads(msg['Data'].decode('utf-8'))
+        assert decoded['messageBody'] == {'some': 'message'}
 
