@@ -12,11 +12,12 @@ class TestMessageErrorHandler(object):
         self.logger = mock.Mock()
         self.mock_writer = MockStreamWriter()
         self.handler = handlers.MessageErrorHandler(
-            invalid_stream_name="invalid_stream",
-            error_stream_name="error_stream",
+            invalid_stream_name='invalid_stream',
+            error_stream_name='error_stream',
             logger=self.logger,
             writer=self.mock_writer
         )
+
     @pytest.fixture
     def serialised_payload(self):
         return json.dumps({
@@ -34,8 +35,7 @@ class TestMessageErrorHandler(object):
         assert json.loads(payload)['messageBody'] == {'some': 'message'}
 
     def test_error_handling_with_valid_json(self, serialised_payload):
-        self.handler.handle_error(serialised_payload, "ERROR", "Error occurred")
+        self.handler.handle_error(
+            serialised_payload, 'ERROR', 'Error occurred')
         payload = self.mock_writer.streams['error_stream'][0]
         assert json.loads(payload)['messageBody'] == {'some': 'message'}
-
-
