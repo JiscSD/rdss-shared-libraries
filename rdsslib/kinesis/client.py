@@ -21,13 +21,19 @@ class KinesisClient(object):
 
 
 class EnhancedKinesisClient(KinesisClient):
-    def __init__(self, writer, reader, logger, decorator, error_handler):
+    def __init__(self, writer, reader, logger, error_handler, decorators=None):
         super().__init__(writer, reader, logger)
-        self.decorator = decorator
+        if decorators:
+            self.decorators = decorators
+        else:
+            self.decorators = []
         self.error_handler = error_handler
 
-    def _decorate_message_history(self, payload):
-        return self.decorator.process(payload)
+    def _apply_decorators(self, payload):
+        decorated_payload = payload
+        for decorator in self.decorators:
+            decorated_payload = decorator.process(payload)
+        return decorated_payload
 
     def _check_payload_json_type(self, payload):
         if type(json.loads(payload)) is not dict:
@@ -37,7 +43,7 @@ class EnhancedKinesisClient(KinesisClient):
 
     def write_message(self, stream_names, payload, max_attempts):
         if self._check_payload_json_type(payload):
-            decorated_payload = self._decorate_message_history(payload)
+            decorated_payload = self._apply_decorators(payload)
             if decorated_payload:
                 try:
                     super().write_message(stream_names, payload, max_attempts)

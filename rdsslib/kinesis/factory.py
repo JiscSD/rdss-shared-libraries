@@ -20,7 +20,7 @@ def kinesis_client_factory(client_app):
                              reader=reader,
                              logger=logger)
     elif client_app == 'enhanced':
-        decorator = RouterHistoryDecorator()
+        decorators = [RouterHistoryDecorator()]
         handler = MessageErrorHandler(invalid_stream_name='invalid_stream',
                                       error_stream_name='error_stream',
                                       logger=logger,
@@ -28,5 +28,5 @@ def kinesis_client_factory(client_app):
         return EnhancedKinesisClient(writer=writer,
                                      reader=reader,
                                      logger=logger,
-                                     decorator=decorator,
-                                     error_handler=handler)
+                                     error_handler=handler,
+                                     decorators=decorators)
