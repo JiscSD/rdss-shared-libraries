@@ -1,16 +1,9 @@
 from collections import defaultdict
 import json
+from .kinesis_helpers import MockStreamWriter
 import mock
 import pytest
 from rdsslib.kinesis import handlers
-
-
-class MockStreamWriter(object):
-    def __init__(self):
-        self.streams = defaultdict(list)
-
-    def put_stream(self, stream_name, payload, max_attempts):
-        self.streams[stream_name].append(payload)
 
 
 class TestMessageErrorHandler(object):
@@ -22,7 +15,7 @@ class TestMessageErrorHandler(object):
             invalid_stream_name="invalid_stream",
             error_stream_name="error_stream",
             logger=self.logger,
-            stream_writer=self.mock_writer
+            writer=self.mock_writer
         )
     @pytest.fixture
     def serialised_payload(self):

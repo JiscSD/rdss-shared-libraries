@@ -3,11 +3,11 @@ import json
 
 class MessageErrorHandler(object):
     """ Handles invalid and errored messages"""
-    def __init__(self, invalid_stream_name, error_stream_name, logger, stream_writer):
+    def __init__(self, invalid_stream_name, error_stream_name, logger, writer):
         self.invalid_stream_name = invalid_stream_name
         self.error_stream_name = error_stream_name
         self.logger = logger
-        self.writer = stream_writer
+        self.writer = writer
 
     def handle_error(self, payload, error_code, error_description):
         try:
