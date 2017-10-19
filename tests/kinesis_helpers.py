@@ -1,6 +1,15 @@
+from collections import defaultdict
 import json
 import moto
 import pytest
+
+
+class MockStreamWriter(object):
+    def __init__(self):
+        self.streams = defaultdict(list)
+
+    def put_stream(self, stream_name, payload, max_attempts):
+        self.streams[stream_name].append(payload)
 
 
 class KinesisMixin(object):
