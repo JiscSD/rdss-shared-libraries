@@ -1,40 +1,17 @@
 import boto3
 import json
-from .kinesis_helpers import get_records
+from .kinesis_helpers import get_records, KinesisMixin
 import logging
-import moto
 import pytest
 from rdsslib.kinesis import writer
 
 
-class TestStreamWriter(object):
+class TestStreamWriter(KinesisMixin):
     """Test Kinesis Stream Writer."""
-
-    def setup(self):
-        """Start mocking kinesis."""
-        self.mock = moto.mock_kinesis()
-        self.mock.start()
 
     @pytest.fixture
     def client(self):
         return boto3.client('kinesis')
-
-    @pytest.fixture
-    def payload(self):
-        """Return a sample payload."""
-        return {
-            'messageHeader': {
-                'id': '90cbdf86-6892-4bf9-845f-dbd61eb80065'
-            },
-            'messageBody': {
-                'some': 'message'
-            }
-        }
-
-    @pytest.fixture
-    def serialised_payload(self, payload):
-        """Return payload serialised to JSON formatted str"""
-        return json.dumps(payload)
 
     def test_put_stream(self, serialised_payload, client):
         logger = logging.getLogger()
@@ -46,6 +23,3 @@ class TestStreamWriter(object):
             decoded = json.loads(msg['Data'].decode('utf-8'))
             assert decoded['messageBody'] == {'some': 'message'}
 
-    def teardown(self):
-        """Stop mocking kinesis."""
-        self.mock.stop()
