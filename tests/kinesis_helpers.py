@@ -1,3 +1,36 @@
+import json
+import moto
+import pytest
+
+
+class KinesisMixin(object):
+
+    def setup(self):
+        self.mock = moto.mock_kinesis()
+        self.mock.start()
+
+    @pytest.fixture
+    def payload(self):
+        """Return a sample payload."""
+        return {
+            'messageHeader': {
+                'id': '90cbdf86-6892-4bf9-845f-dbd61eb80065'
+            },
+            'messageBody': {
+                'some': 'message'
+            }
+        }
+
+    @pytest.fixture
+    def serialised_payload(self, payload):
+        """Return payload serialised to JSON formatted str"""
+        return json.dumps(payload)
+
+    def teardown(self):
+        """Stop mocking kinesis."""
+        self.mock.stop()
+
+
 def get_records(client, stream_name):
     """Return a list of records from given stream."""
     shard_id = client.describe_stream(
