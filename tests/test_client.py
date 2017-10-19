@@ -12,24 +12,12 @@ class TestKinesisClient(KinesisMixin):
     """Test the Kinesis Client."""
 
     def test_client_writes_and_reads_messages(self, serialised_payload):
-        s_client = factory.kinesis_client_factory('figshare')
-        s_client.writer.client.create_stream(StreamName='test_stream', ShardCount=1)
-        s_client.write_message(['test_stream'], serialised_payload, 2)
-        records = s_client.read_messages('test_stream')
-        msg = next(records)
-        decoded = json.loads(msg['Data'].decode('utf-8'))
-        assert decoded['messageBody'] == {'some': 'message'}
+        self.client_works_for_valid_json_messages('basic', serialised_payload)
 
 
 class TestEnhancedKinesisClient(KinesisMixin):
     """Test Enhanced Kinesis Client"""
 
     def test_enhanced_kinesis_client_handles_valid_json(self, serialised_payload):
-        s_client = factory.kinesis_client_factory('content_router')
-        s_client.writer.client.create_stream(StreamName='test_stream', ShardCount=1)
-        s_client.write_message(['test_stream'], serialised_payload, 1)
-        records = s_client.read_messages('test_stream')
-        msg = next(records)
-        decoded = json.loads(msg['Data'].decode('utf-8'))
-        assert decoded['messageBody'] == {'some': 'message'}
+        self.client_works_for_valid_json_messages('enhanced', serialised_payload)
 
