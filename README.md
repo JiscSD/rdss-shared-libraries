@@ -3,7 +3,7 @@
 Libraries used across RDSS components.
 
     * kinesis - a KinesisClient for applications that need to read from and write to Kinesis streams
-    
+
 ## Developer setup
 
 ```

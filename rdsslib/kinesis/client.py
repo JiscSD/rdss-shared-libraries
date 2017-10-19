@@ -3,7 +3,6 @@ import logging
 from .errors import MaxRetriesExceededException
 
 
-
 class KinesisClient(object):
     def __init__(self, writer, reader, logger):
         self.logger = logger
@@ -27,7 +26,6 @@ class EnhancedKinesisClient(KinesisClient):
         self.decorator = decorator
         self.error_handler = error_handler
 
-
     def _decorate_message_history(self, payload):
         return self.decorator.process(payload)
 
@@ -46,8 +44,10 @@ class EnhancedKinesisClient(KinesisClient):
                 except MaxRetriesExceededException as e:
                     stream_name = e.args[0]
                     error_code = 'GENERR005'
-                    error_description = 'Maximum retry attempts [%s] exceed for stream [%s]' % (max_attempts, stream_name)
-                    self.error_handler.handle_error(payload, error_code, error_description)
+                    error_description = 'Maximum retry attempts [%s] exceed for stream [%s]' % (
+                        max_attempts, stream_name)
+                    self.error_handler.handle_error(
+                        payload, error_code, error_description)
             else:
                 # payload decoration has failed - move to invalid stream
                 self.error_handler.handle_invalid_json(payload)

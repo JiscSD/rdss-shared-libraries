@@ -22,4 +22,3 @@ class TestStreamWriter(KinesisMixin):
         for msg in records:
             decoded = json.loads(msg['Data'].decode('utf-8'))
             assert decoded['messageBody'] == {'some': 'message'}
-

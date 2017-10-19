@@ -16,8 +16,8 @@ class TestStreamReader(KinesisMixin):
         s_reader = reader.StreamReader(client=client)
         s_reader.client.create_stream(StreamName='test_stream', ShardCount=1)
         s_reader.client.put_record(StreamName='test_stream',
-                                   Data = serialised_payload,
-                                   PartitionKey = 'testkey')
+                                   Data=serialised_payload,
+                                   PartitionKey='testkey')
         record_gen = s_reader.read_stream('test_stream')
         msg = next(record_gen)
         decoded = json.loads(msg['Data'].decode('utf-8'))

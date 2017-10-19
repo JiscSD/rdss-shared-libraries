@@ -15,11 +15,11 @@ def kinesis_client_factory(client_app):
                           logger=logger)
     reader = StreamReader(client=boto_client)
 
-    if client_app=='basic':
+    if client_app == 'basic':
         return KinesisClient(writer=writer,
                              reader=reader,
                              logger=logger)
-    elif client_app=='enhanced':
+    elif client_app == 'enhanced':
         decorator = RouterHistoryDecorator()
         handler = MessageErrorHandler(invalid_stream_name='invalid_stream',
                                       error_stream_name='error_stream',

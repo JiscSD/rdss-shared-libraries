@@ -38,7 +38,8 @@ class KinesisMixin(object):
 
     def client_works_for_valid_json_messages(self, client_type, serialised_payload):
         s_client = factory.kinesis_client_factory(client_type)
-        s_client.writer.client.create_stream(StreamName='test_stream', ShardCount=1)
+        s_client.writer.client.create_stream(
+            StreamName='test_stream', ShardCount=1)
         s_client.write_message(['test_stream'], serialised_payload, 1)
         records = s_client.read_messages('test_stream')
         msg = next(records)
