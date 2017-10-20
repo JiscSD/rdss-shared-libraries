@@ -1,7 +1,10 @@
 from collections import defaultdict
 import json
-import moto
 import pytest
+import uuid
+
+import moto
+
 from rdsslib.kinesis import factory
 
 
@@ -24,7 +27,7 @@ class KinesisMixin(object):
         """Return a sample payload."""
         return {
             'messageHeader': {
-                'id': '90cbdf86-6892-4bf9-845f-dbd61eb80065'
+                'id': str(uuid.uuid4())
             },
             'messageBody': {
                 'some': 'message'
