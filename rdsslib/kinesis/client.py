@@ -1,6 +1,10 @@
 import json
 import logging
+
 from .errors import MaxRetriesExceededException
+
+
+MAX_ATTEMPTS = 6
 
 
 class KinesisClient(object):
@@ -10,7 +14,7 @@ class KinesisClient(object):
         self.writer = writer
         self.reader = reader
 
-    def write_message(self, stream_names, payload, max_attempts):
+    def write_message(self, stream_names, payload, max_attempts=MAX_ATTEMPTS):
         """Take a payload and put it into each stream in stream_names."""
         for stream_name in stream_names:
             self.writer.put_stream(stream_name, payload, max_attempts)
@@ -41,7 +45,7 @@ class EnhancedKinesisClient(KinesisClient):
         else:
             return True
 
-    def write_message(self, stream_names, payload, max_attempts):
+    def write_message(self, stream_names, payload, max_attempts=MAX_ATTEMPTS):
         if self._is_payload_json_type(payload):
             decorated_payload = self._apply_decorators(payload)
             if decorated_payload:
