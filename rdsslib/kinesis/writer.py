@@ -1,13 +1,15 @@
-from .errors import MaxRetriesExceededException
+import logging
 import time
+
+from .errors import MaxRetriesExceededException
 
 
 class StreamWriter(object):
     """ Wraps boto3 to write to a stream"""
 
-    def __init__(self, client, logger):
+    def __init__(self, client):
         self.client = client
-        self.logger = logger
+        self.logger = logging.getLogger(__name__)
 
     def put_stream(self, stream_name, payload, max_attempts):
         """Attempt to put the payload in the provided stream name."""

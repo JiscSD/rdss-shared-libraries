@@ -8,8 +8,8 @@ MAX_ATTEMPTS = 6
 
 
 class KinesisClient(object):
-    def __init__(self, writer, reader, logger):
-        self.logger = logger
+    def __init__(self, writer, reader):
+        self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
         self.writer = writer
         self.reader = reader
@@ -25,8 +25,8 @@ class KinesisClient(object):
 
 
 class EnhancedKinesisClient(KinesisClient):
-    def __init__(self, writer, reader, logger, error_handler, decorators=None):
-        super().__init__(writer, reader, logger)
+    def __init__(self, writer, reader, error_handler, decorators=None):
+        super().__init__(writer, reader)
         if decorators:
             self.decorators = decorators
         else:

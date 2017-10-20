@@ -9,12 +9,10 @@ from rdsslib.kinesis import handlers
 class TestMessageErrorHandler(object):
 
     def setup(self):
-        self.logger = mock.Mock()
         self.mock_writer = MockStreamWriter()
         self.handler = handlers.MessageErrorHandler(
             invalid_stream_name='invalid_stream',
             error_stream_name='error_stream',
-            logger=self.logger,
             writer=self.mock_writer
         )
 

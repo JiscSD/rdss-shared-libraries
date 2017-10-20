@@ -1,13 +1,14 @@
 import json
+import logging
 
 
 class MessageErrorHandler(object):
     """ Handles invalid and errored messages"""
 
-    def __init__(self, invalid_stream_name, error_stream_name, logger, writer):
+    def __init__(self, invalid_stream_name, error_stream_name, writer):
         self.invalid_stream_name = invalid_stream_name
         self.error_stream_name = error_stream_name
-        self.logger = logger
+        self.logger = logging.getLogger(__name__)
         self.writer = writer
 
     def handle_error(self, payload, error_code, error_description):
