@@ -35,14 +35,14 @@ class EnhancedKinesisClient(KinesisClient):
             decorated_payload = decorator.process(payload)
         return decorated_payload
 
-    def _check_payload_json_type(self, payload):
+    def _is_payload_json_type(self, payload):
         if type(json.loads(payload)) is not dict:
             return False
         else:
             return True
 
     def write_message(self, stream_names, payload, max_attempts):
-        if self._check_payload_json_type(payload):
+        if self._is_payload_json_type(payload):
             decorated_payload = self._apply_decorators(payload)
             if decorated_payload:
                 try:
