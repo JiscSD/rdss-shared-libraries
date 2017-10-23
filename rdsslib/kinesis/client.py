@@ -34,7 +34,10 @@ class EnhancedKinesisClient(KinesisClient):
         self.error_handler = error_handler
 
     def _apply_decorators(self, payload):
-        """ Applies a sequence of decorators that enhance and modify the contents of a payload"""
+        """
+        Applies a sequence of decorators that
+        enhance and modify the contents of a payload
+        """
         decorated_payload = payload
         for decorator in self.decorators:
             try:

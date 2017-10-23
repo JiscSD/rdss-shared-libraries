@@ -12,7 +12,10 @@ class StreamWriter(object):
         self.logger = logging.getLogger(__name__)
 
     def put_stream(self, stream_name, payload, max_attempts):
-        """Attempt to put the payload in the provided stream name for max_attempts."""
+        """
+        Attempt to put the payload in the provided
+        stream name for max_attempts.
+        """
         attempt = 1
 
         while attempt <= max_attempts:
