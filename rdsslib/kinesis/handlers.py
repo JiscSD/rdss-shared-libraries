@@ -42,7 +42,7 @@ class MessageErrorHandler(object):
             )
 
             self.writer.put_stream(self.error_stream_name, payload, 1)
-        except:
+        except Exception:
             self.logger.exception(
                 'Unable to move payload [%s] to stream [%s]',
                 payload,
@@ -57,7 +57,7 @@ class MessageErrorHandler(object):
                 self.invalid_stream_name
             )
             self.writer.put_stream(self.invalid_stream_name, payload, 1)
-        except:
+        except Exception:
             self.logger.exception(
                 'Unable to move payload [%s] to stream [%s]',
                 payload,
