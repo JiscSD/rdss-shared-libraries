@@ -39,7 +39,8 @@ class EnhancedKinesisClient(KinesisClient):
             try:
                 decorated_payload = decorator.process(payload)
             except Exception:
-                self.logger.warning("Failed to apply decorator {}".format(decorator.name))
+                self.logger.warning(
+                    'Failed to apply decorator {}'.format(decorator.name))
                 raise DecoratorApplyException()
         return decorated_payload
 

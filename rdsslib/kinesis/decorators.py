@@ -10,7 +10,7 @@ class RouterHistoryDecorator(object):
 
     @property
     def name(self):
-        return "RouterHistoryDecorator"
+        return 'RouterHistoryDecorator'
 
     def process(self, payload):
         """Decorates message's history header with details"""
