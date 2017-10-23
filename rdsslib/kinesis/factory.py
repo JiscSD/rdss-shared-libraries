@@ -9,6 +9,7 @@ from .writer import StreamWriter
 
 
 def kinesis_client_factory(client_app):
+    """ Create customised instances of KinesisClient or its subclasses"""
     boto_client = boto3.client('kinesis')
     writer = StreamWriter(client=boto_client)
     reader = StreamReader(client=boto_client)

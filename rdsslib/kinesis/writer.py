@@ -5,14 +5,14 @@ from .errors import MaxRetriesExceededException
 
 
 class StreamWriter(object):
-    """ Wraps boto3 to write to a stream"""
+    """ Wraps boto3 to write to a Kinesis stream"""
 
     def __init__(self, client):
         self.client = client
         self.logger = logging.getLogger(__name__)
 
     def put_stream(self, stream_name, payload, max_attempts):
-        """Attempt to put the payload in the provided stream name."""
+        """Attempt to put the payload in the provided stream name for max_attempts."""
         attempt = 1
 
         while attempt <= max_attempts:

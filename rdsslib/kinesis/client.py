@@ -15,7 +15,7 @@ class KinesisClient(object):
         self.reader = reader
 
     def write_message(self, stream_names, payload, max_attempts=MAX_ATTEMPTS):
-        """Take a payload and put it into each stream in stream_names."""
+        """Write a payload into each stream in stream_names"""
         for stream_name in stream_names:
             self.writer.put_stream(stream_name, payload, max_attempts)
 
@@ -34,6 +34,7 @@ class EnhancedKinesisClient(KinesisClient):
         self.error_handler = error_handler
 
     def _apply_decorators(self, payload):
+        """ Applies a sequence of decorators that enhance and modify the contents of a payload"""
         decorated_payload = payload
         for decorator in self.decorators:
             try:
@@ -45,12 +46,14 @@ class EnhancedKinesisClient(KinesisClient):
         return decorated_payload
 
     def _is_payload_json_type(self, payload):
+        """ Checks if the deserialised payload is of type dict"""
         if type(json.loads(payload)) is not dict:
             return False
         else:
             return True
 
     def write_message(self, stream_names, payload, max_attempts=MAX_ATTEMPTS):
+        """Write a payload into each stream in stream_names"""
         if self._is_payload_json_type(payload):
             decorated_payload = self._apply_decorators(payload)
             if decorated_payload:
