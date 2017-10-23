@@ -1,7 +1,7 @@
 import json
 import logging
 
-from .errors import MaxRetriesExceededException
+from .errors import MaxRetriesExceededException, DecoratorApplyException
 
 
 MAX_ATTEMPTS = 6
@@ -36,7 +36,11 @@ class EnhancedKinesisClient(KinesisClient):
     def _apply_decorators(self, payload):
         decorated_payload = payload
         for decorator in self.decorators:
-            decorated_payload = decorator.process(payload)
+            try:
+                decorated_payload = decorator.process(payload)
+            except Exception:
+                self.logger.warning("Failed to apply decorator {}".format(decorator.name))
+                raise DecoratorApplyException()
         return decorated_payload
 
     def _is_payload_json_type(self, payload):
