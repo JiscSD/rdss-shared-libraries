@@ -39,7 +39,8 @@ class KinesisMixin(object):
         """Return payload serialised to JSON formatted str"""
         return json.dumps(payload)
 
-    def client_works_for_valid_json_messages(self, client_type, serialised_payload):
+    def client_works_for_valid_json_messages(self, client_type,
+                                             serialised_payload):
         s_client = factory.kinesis_client_factory(client_type)
         s_client.writer.client.create_stream(
             StreamName='test_stream', ShardCount=1)

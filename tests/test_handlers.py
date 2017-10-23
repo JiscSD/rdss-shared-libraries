@@ -1,7 +1,5 @@
-from collections import defaultdict
 import json
 from .kinesis_helpers import MockStreamWriter
-import mock
 import pytest
 from rdsslib.kinesis import handlers
 

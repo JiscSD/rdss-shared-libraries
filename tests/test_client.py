@@ -12,6 +12,7 @@ class TestKinesisClient(KinesisMixin):
 class TestEnhancedKinesisClient(KinesisMixin):
     """Test Enhanced Kinesis Client"""
 
-    def test_enhanced_kinesis_client_handles_valid_json(self, serialised_payload):
+    def test_enhanced_kinesis_client_handles_valid_json(self,
+                                                        serialised_payload):
         self.client_works_for_valid_json_messages(
             'enhanced', serialised_payload)

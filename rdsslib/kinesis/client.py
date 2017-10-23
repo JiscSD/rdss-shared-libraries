@@ -59,8 +59,8 @@ class EnhancedKinesisClient(KinesisClient):
                 except MaxRetriesExceededException as e:
                     stream_name = e.args[0]
                     error_code = 'GENERR005'
-                    error_description = 'Maximum retry attempts [%s] exceed for stream [%s]' % (
-                        max_attempts, stream_name)
+                    error_description = 'Maximum retry attempts {0} exceed'\
+                        'for stream {1}'.format(max_attempts, stream_name)
                     self.error_handler.handle_error(
                         payload, error_code, error_description)
             else:
