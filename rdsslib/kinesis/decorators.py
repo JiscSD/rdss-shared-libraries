@@ -13,7 +13,11 @@ class RouterHistoryDecorator(object):
         return 'RouterHistoryDecorator'
 
     def process(self, payload):
-        """Decorates message's history header with details"""
+        """Decorates message's history header with details
+        :param payload: JSON formatted payload
+        :return: decorated JSON formatted payload
+        :rtype: str
+        """
         try:
             payload_json = json.loads(payload)
         except ValueError:

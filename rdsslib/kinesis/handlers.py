@@ -6,12 +6,28 @@ class MessageErrorHandler(object):
     """ Handles invalid and errored messages"""
 
     def __init__(self, invalid_stream_name, error_stream_name, writer):
+        """
+        :param invalid_stream_name: Kinesis stream for invalid messages
+        :param error_stream_name: Kinesis stream for messages with errors
+        :param writer: writes payloads to Kinesis streams
+        :type invalid_stream_name: str
+        :type error_stream_name: str
+        :type writer: writer.StreamWriter
+        """
         self.invalid_stream_name = invalid_stream_name
         self.error_stream_name = error_stream_name
         self.logger = logging.getLogger(__name__)
         self.writer = writer
 
     def handle_error(self, payload, error_code, error_description):
+        """
+        :param payload: serialised JSON formatted message
+        :param error_code: Error code
+        :param error_description: Description of error
+        :type payload: str
+        :type error_code: str
+        :type error_description: str
+        """
         try:
             self.logger.info(
                 'Setting \'errorCode\' [%s] and \'errorDescription\' [%s] on '
@@ -50,6 +66,10 @@ class MessageErrorHandler(object):
             )
 
     def handle_invalid_json(self, payload):
+        """
+        :param payload: serialised JSON formatted message
+        :type payload: str
+        """
         try:
             self.logger.info(
                 'Moving invalid JSON payload [%s] to stream [%s]',

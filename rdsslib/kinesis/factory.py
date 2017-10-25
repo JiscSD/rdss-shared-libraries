@@ -8,16 +8,21 @@ from .reader import StreamReader
 from .writer import StreamWriter
 
 
-def kinesis_client_factory(client_app):
-    """ Create customised instances of KinesisClient or its subclasses"""
+def kinesis_client_factory(client_type):
+    """ Create customised instances of KinesisClient or its subclasses
+    :param client_type: Specifies the type of client that the factory
+                        should construct
+    :return: An instance of Kinesis client
+    :rtype: client.KinesisClient or client.EnhancedKinesisClient
+    """
     boto_client = boto3.client('kinesis')
     writer = StreamWriter(client=boto_client)
     reader = StreamReader(client=boto_client)
 
-    if client_app == 'basic':
+    if client_type == 'basic':
         return KinesisClient(writer=writer,
                              reader=reader)
-    elif client_app == 'enhanced':
+    elif client_type == 'enhanced':
         decorators = [RouterHistoryDecorator()]
         handler = MessageErrorHandler(invalid_stream_name='invalid_stream',
                                       error_stream_name='error_stream',
