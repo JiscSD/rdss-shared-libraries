@@ -1,3 +1,4 @@
 boto3
+moto
 pre-commit
 pytest
