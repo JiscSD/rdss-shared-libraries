@@ -30,7 +30,7 @@ deps-uninstall: ## Uninstall Python dependencies
 	@pip freeze > requirements.txt
 
 env: ## Create local Python virtualenv
-	@virtualenv -p python3 env
+	@python -m venv env
 
 test: ## Run tests
 	@pytest
