@@ -3,6 +3,7 @@
 Libraries used across RDSS components.
 
     * kinesis - a KinesisClient for applications that need to read from and write to Kinesis streams
+    * taxonomy - a library to access local or Git versioned taxonomy schema mappings
 
 ## Developer setup
 
