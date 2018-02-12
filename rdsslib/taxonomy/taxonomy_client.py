@@ -103,8 +103,15 @@ class TaxonomyGitClient(TaxonomyClientBase):
         self.temp_reponame = TEMP_GIT_REPONAME
         self._initclient()
 
+    def _get_targetrepodir(self):
+        current_dir = os.path.abspath(os.getcwd())
+        temp_dir = os.path.join(
+            current_dir, self.temp_reponame
+        )
+        return temp_dir
+
     def _initclient(self):
-        temp_dir = self._get_filedir()
+        temp_dir = self._get_targetrepodir()
         Repo.clone_from(self.repo_url, temp_dir)
 
     def _get_filedir(self):

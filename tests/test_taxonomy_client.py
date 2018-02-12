@@ -34,8 +34,9 @@ class TestTaxonomyClients(object):
             ]
         }
 
-        os.mkdir(TEMP_GIT_REPONAME)
+        os.makedirs(os.path.join(TEMP_GIT_REPONAME, 'datamodels'))
         with open(os.path.join(TEMP_GIT_REPONAME,
+                               'datamodels',
                                'checksumType.json'), 'w') as handle:
             handle.write(json.dumps(json_content))
 
