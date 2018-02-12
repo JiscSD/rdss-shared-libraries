@@ -109,7 +109,9 @@ class TaxonomyGitClient(TaxonomyClientBase):
 
     def _get_filedir(self):
         current_dir = os.path.abspath(os.getcwd())
-        temp_dir = os.path.join(current_dir, self.temp_reponame)
+        temp_dir = os.path.join(
+            current_dir, self.temp_reponame, 'datamodels'
+        )
         return temp_dir
 
 
