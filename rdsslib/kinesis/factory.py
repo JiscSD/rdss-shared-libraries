@@ -8,7 +8,7 @@ from .reader import StreamReader
 from .writer import StreamWriter
 
 
-def kinesis_client_factory(client_type):
+def kinesis_client_factory(client_type, read_interval=0.2):
     """ Create customised instances of KinesisClient or its subclasses
     :param client_type: Specifies the type of client that the factory
                         should construct
@@ -17,7 +17,7 @@ def kinesis_client_factory(client_type):
     """
     boto_client = boto3.client('kinesis')
     writer = StreamWriter(client=boto_client)
-    reader = StreamReader(client=boto_client)
+    reader = StreamReader(client=boto_client, read_interval=read_interval)
 
     if client_type == 'basic':
         return KinesisClient(writer=writer,
