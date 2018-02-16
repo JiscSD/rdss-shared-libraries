@@ -67,7 +67,7 @@ class StreamReader(object):
             response = self.client.get_shard_iterator(
                 StreamName=stream_name,
                 ShardId=shard_id,
-                ShardIteratorType='AT_SEQUENCE_NUMBER',
+                ShardIteratorType='AFTER_SEQUENCE_NUMBER',
                 StartingSequenceNumber=seq_number
             )
         return response['ShardIterator']
