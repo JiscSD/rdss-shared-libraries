@@ -1,0 +1,20 @@
+- repo: git://github.com/pre-commit/pre-commit-hooks
+  sha: v1.1.1
+  hooks:
+    - id: autopep8-wrapper
+    - id: check-ast
+    - id: check-added-large-files
+    - id: check-json
+    - id: check-merge-conflict
+    - id: check-case-conflict
+    - id: check-yaml
+    - id: debug-statements
+    - id: detect-private-key
+    - id: double-quote-string-fixer
+    - id: end-of-file-fixer
+    - id: forbid-new-submodules
+    - id: requirements-txt-fixer
+    - id: trailing-whitespace
+    - id: flake8
+    - id: pyflakes
+    - id: pretty-format-json
