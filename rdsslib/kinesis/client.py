@@ -122,3 +122,12 @@ class EnhancedKinesisClient(KinesisClient):
                 self.error_handler.handle_invalid_json(payload)
         else:
             self.error_handler.handle_invalid_json(payload)
+
+    def handle_error(self, payload, error_code, error_description):
+        """ Allows errors to be posted to the stream occurring from
+        activities like payload validation
+        :param payload: JSON payload
+        :param error_code: Error Code
+        :param error_description: Description Of Error
+        """
+        self.error_handler.handle_error(payload,error_code,error_description)
