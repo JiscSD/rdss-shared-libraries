@@ -20,28 +20,38 @@ class RouterHistoryDecorator(object):
         """
         try:
             payload_json = json.loads(payload)
-        except ValueError:
-            return
+        except json.decoder.JSONDecodeError:
+            payload_json = {}
 
-        if 'messageHeader' not in payload_json:
-            return
+        try:
+            header = payload_json['messageHeader']
+        except (TypeError, KeyError):
+            header = {}
 
-        if 'messageHistory' not in payload_json['messageHeader']:
-            payload_json['messageHeader']['messageHistory'] = []
+        try:
+            history = payload_json['messageHeader']['messageHistory']
+        except (TypeError, KeyError):
+            history = []
 
-        if type(payload_json['messageHeader']['messageHistory']) is not list:
-            if type(payload_json['messageHeader']['messageHistory']) is dict:
-                current_message_history = payload_json['messageHeader'][
-                    'messageHistory']
-                payload_json['messageHeader']['messageHistory'] = []
-                payload_json['messageHeader']['messageHistory'].append(
-                    current_message_history)
-            else:
-                return
-
-        payload_json['messageHeader']['messageHistory'].append({
+        history_element = {
             'machineId': 'rdss-institutional-content-based-router',
             'machineAddress': socket.gethostbyname(socket.gethostname()),
             'timestamp': datetime.now(tzlocal()).isoformat()
-        })
+        }
+
+        try:
+            history.append(history_element)
+        except AttributeError:
+            history = [history_element]
+
+        try:
+            header['messageHistory'] = history
+        except TypeError:
+            header = {'messageHistory': history}
+
+        try:
+            payload_json['messageHeader'] = header
+        except TypeError:
+            payload_json = {'messageHeader': header}
+
         return json.dumps(payload_json)
