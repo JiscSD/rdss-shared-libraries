@@ -45,9 +45,9 @@ class TestMessageErrorHandler(object):
                                             None,
                                             self.handler,
                                             None)
+        error = 'Generated Test Message to Error'
         mock_client.handle_error(payload=serialised_payload,
                                  error_code='TESTERR001',
-                                 error_description=
-                                    'Generated Test Message to Error')
+                                 error_description=error)
         payload = self.mock_writer.streams['error_stream'][0]
         assert json.loads(payload)['messageBody'] == {'some': 'message'}
