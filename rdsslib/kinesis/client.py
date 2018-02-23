@@ -130,4 +130,4 @@ class EnhancedKinesisClient(KinesisClient):
         :param error_code: Error Code
         :param error_description: Description Of Error
         """
-        self.error_handler.handle_error(payload,error_code,error_description)
+        self.error_handler.handle_error(payload, error_code, error_description)
