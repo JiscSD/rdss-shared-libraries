@@ -1,7 +1,7 @@
 import json
 import pytest
 
-from rdsslib.kinesis.client import EnhancedKinesisClient, handlers
+from rdsslib.kinesis.client import EnhancedKinesisClient
 from rdsslib.kinesis import handlers
 from .kinesis_helpers import MockStreamWriter
 
