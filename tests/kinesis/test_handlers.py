@@ -1,10 +1,9 @@
 import json
-
-from rdsslib.kinesis.client import EnhancedKinesisClient
-
-from .kinesis_helpers import MockStreamWriter
 import pytest
+
+from rdsslib.kinesis.client import EnhancedKinesisClient, handlers
 from rdsslib.kinesis import handlers
+from .kinesis_helpers import MockStreamWriter
 
 
 class TestMessageErrorHandler(object):
