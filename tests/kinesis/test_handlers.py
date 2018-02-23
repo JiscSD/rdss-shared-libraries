@@ -39,10 +39,15 @@ class TestMessageErrorHandler(object):
         payload = self.mock_writer.streams['error_stream'][0]
         assert json.loads(payload)['messageBody'] == {'some': 'message'}
 
-    def test_error_handling_from_client_with_valid_json(self, serialised_payload):
-        mock_client = EnhancedKinesisClient(None, None, self.handler, None)
+    def test_error_handling_from_client_with_valid_json(self,
+                                                        serialised_payload):
+        mock_client = EnhancedKinesisClient(None,
+                                            None,
+                                            self.handler,
+                                            None)
         mock_client.handle_error(payload=serialised_payload,
                                  error_code='TESTERR001',
-                                 error_description='Generated Test Message to Error')
+                                 error_description=
+                                    'Generated Test Message to Error')
         payload = self.mock_writer.streams['error_stream'][0]
         assert json.loads(payload)['messageBody'] == {'some': 'message'}
