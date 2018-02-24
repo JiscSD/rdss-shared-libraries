@@ -111,4 +111,4 @@ class EnhancedKinesisClient(KinesisClient):
                 error_description = 'Maximum retry attempts {0} exceed'\
                     'for stream {1}'.format(max_attempts, stream_name)
                 self.error_handler.handle_error(
-                    payload, error_code, error_description)
+                    decorated_payload, error_code, error_description)
