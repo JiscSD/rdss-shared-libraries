@@ -98,15 +98,16 @@ class EnhancedKinesisClient(KinesisClient):
             json.loads(payload)
         except json.decoder.JSONDecodeError:
             self.error_handler.handle_invalid_json(payload)
-        else:
-            decorated_payload = self._apply_decorators(payload)
-            try:
-                super().write_message(stream_names, decorated_payload,
-                                      max_attempts)
-            except MaxRetriesExceededException as e:
-                stream_name = e.args[0]
-                error_code = 'GENERR005'
-                error_description = 'Maximum retry attempts {0} exceed'\
-                    'for stream {1}'.format(max_attempts, stream_name)
-                self.error_handler.handle_error(
-                    payload, error_code, error_description)
+            return
+
+        decorated_payload = self._apply_decorators(payload)
+        try:
+            super().write_message(stream_names, decorated_payload,
+                                  max_attempts)
+        except MaxRetriesExceededException as e:
+            stream_name = e.args[0]
+            error_code = 'GENERR005'
+            error_description = 'Maximum retry attempts {0} exceed'\
+                'for stream {1}'.format(max_attempts, stream_name)
+            self.error_handler.handle_error(
+                payload, error_code, error_description)
