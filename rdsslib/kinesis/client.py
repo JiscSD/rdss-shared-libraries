@@ -109,7 +109,8 @@ class EnhancedKinesisClient(KinesisClient):
             decorated_payload = self._apply_decorators(payload)
             if decorated_payload:
                 try:
-                    super().write_message(stream_names, payload, max_attempts)
+                    super().write_message(stream_names, decorated_payload,
+                                          max_attempts)
                 except MaxRetriesExceededException as e:
                     stream_name = e.args[0]
                     error_code = 'GENERR005'
