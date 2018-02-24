@@ -41,7 +41,7 @@ class StreamWriter(object):
         self.logger.error(
             'GENERR005 Unable to add payload [%s] to Kinesis Stream [%s] '
             '- maximum retries exceeded.', payload, stream_name)
-        raise MaxRetriesExceededException()
+        raise MaxRetriesExceededException(stream_name)
 
     def __do_put_record(self, stream_name, payload, attempt):
         """Put the payload in the provided stream.
