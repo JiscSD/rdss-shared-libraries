@@ -96,6 +96,9 @@ class EnhancedKinesisClient(KinesisClient):
         """
         try:
             json.loads(payload)
+        except json.decoder.JSONDecodeError:
+            self.error_handler.handle_invalid_json(payload)
+        else:
             decorated_payload = self._apply_decorators(payload)
             try:
                 super().write_message(stream_names, decorated_payload,
@@ -107,6 +110,3 @@ class EnhancedKinesisClient(KinesisClient):
                     'for stream {1}'.format(max_attempts, stream_name)
                 self.error_handler.handle_error(
                     payload, error_code, error_description)
-
-        except json.decoder.JSONDecodeError:
-            self.error_handler.handle_invalid_json(payload)
