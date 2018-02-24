@@ -33,9 +33,15 @@ class RouterHistoryDecorator(object):
         except (TypeError, KeyError):
             history = []
 
+        try:
+            machine_address = socket.gethostbyname(socket.gethostname())
+        except (socket.gaierror, socket.herror):
+            # Not sure what is best to express unknown: should pass validation
+            machine_address = '0.0.0.0'
+
         history_element = {
             'machineId': 'rdss-institutional-content-based-router',
-            'machineAddress': socket.gethostbyname(socket.gethostname()),
+            'machineAddress': machine_address,
             'timestamp': datetime.now(tzlocal()).isoformat()
         }
 
