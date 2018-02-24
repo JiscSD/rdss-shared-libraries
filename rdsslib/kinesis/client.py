@@ -91,7 +91,10 @@ class EnhancedKinesisClient(KinesisClient):
         :return:
         :rtype: bool
         """
-        return type(json.loads(payload)) is dict
+        try:
+            return type(json.loads(payload)) is dict
+        except json.decoder.JSONDecodeError:
+            return False
 
     def write_message(self, stream_names, payload, max_attempts=MAX_ATTEMPTS):
         """Write a payload into each stream in stream_names
