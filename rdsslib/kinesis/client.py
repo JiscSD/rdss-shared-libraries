@@ -85,17 +85,6 @@ class EnhancedKinesisClient(KinesisClient):
                 raise DecoratorApplyException()
         return decorated_payload
 
-    def _is_payload_json_type(self, payload):
-        """ Deserialises payload and checks if it is of type dict
-        :param payload: JSON payload
-        :return:
-        :rtype: bool
-        """
-        try:
-            return type(json.loads(payload)) is dict
-        except json.decoder.JSONDecodeError:
-            return False
-
     def write_message(self, stream_names, payload, max_attempts=MAX_ATTEMPTS):
         """Write a payload into each stream in stream_names
         :param stream_names: Kinesis streams to write to
@@ -105,7 +94,8 @@ class EnhancedKinesisClient(KinesisClient):
         :type payload: str
         :type max_attempts: int
         """
-        if self._is_payload_json_type(payload):
+        try:
+            json.loads(payload)
             decorated_payload = self._apply_decorators(payload)
             try:
                 super().write_message(stream_names, decorated_payload,
@@ -117,5 +107,6 @@ class EnhancedKinesisClient(KinesisClient):
                     'for stream {1}'.format(max_attempts, stream_name)
                 self.error_handler.handle_error(
                     payload, error_code, error_description)
-        else:
+
+        except json.decoder.JSONDecodeError:
             self.error_handler.handle_invalid_json(payload)
