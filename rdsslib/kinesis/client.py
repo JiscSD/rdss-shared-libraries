@@ -101,15 +101,18 @@ class EnhancedKinesisClient(KinesisClient):
         decorated_payload = self._apply_decorators(payload)
         for stream_name in stream_names:
             try:
-                super().write_message([stream_name], decorated_payload,
+                super().write_message([stream_name],
+                                      decorated_payload,
                                       max_attempts)
             except MaxRetriesExceededException as e:
                 stream_name = e.args[0]
                 error_code = 'GENERR005'
                 error_description = 'Maximum retry attempts {0} exceed'\
-                    'for stream {1}'.format(max_attempts, stream_name)
-                self.error_handler.handle_error(
-                    decorated_payload, error_code, error_description)
+                    'for stream {1}'.format(max_attempts,
+                                            stream_name)
+                self.error_handler.handle_error(decorated_payload,
+                                                error_code,
+                                                error_description)
 
     def handle_error(self, payload, error_code, error_description):
         """ Allows errors to be posted to the stream occurring from
@@ -119,7 +122,3 @@ class EnhancedKinesisClient(KinesisClient):
         :param error_description: Description Of Error
         """
         self.error_handler.handle_error(payload, error_code, error_description)
-
-
-
-
