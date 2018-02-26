@@ -98,6 +98,8 @@ class EnhancedKinesisClient(KinesisClient):
             json.loads(payload)
         except json.decoder.JSONDecodeError:
             self.error_handler.handle_invalid_json(payload)
+            return
+
         decorated_payload = self._apply_decorators(payload)
         for stream_name in stream_names:
             try:
