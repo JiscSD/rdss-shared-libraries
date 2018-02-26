@@ -85,17 +85,6 @@ class EnhancedKinesisClient(KinesisClient):
                 raise DecoratorApplyException()
         return decorated_payload
 
-    def _is_payload_json_type(self, payload):
-        """ Deserialises payload and checks if it is of type dict
-        :param payload: JSON payload
-        :return:
-        :rtype: bool
-        """
-        if type(json.loads(payload)) is not dict:
-            return False
-        else:
-            return True
-
     def write_message(self, stream_names, payload, max_attempts=MAX_ATTEMPTS):
         """Write a payload into each stream in stream_names
         :param stream_names: Kinesis streams to write to
@@ -105,23 +94,22 @@ class EnhancedKinesisClient(KinesisClient):
         :type payload: str
         :type max_attempts: int
         """
-        if self._is_payload_json_type(payload):
-            decorated_payload = self._apply_decorators(payload)
-            if decorated_payload:
-                try:
-                    super().write_message(stream_names, payload, max_attempts)
-                except MaxRetriesExceededException as e:
-                    stream_name = e.args[0]
-                    error_code = 'GENERR005'
-                    error_description = 'Maximum retry attempts {0} exceed'\
-                        'for stream {1}'.format(max_attempts, stream_name)
-                    self.error_handler.handle_error(
-                        payload, error_code, error_description)
-            else:
-                # payload decoration has failed - move to invalid stream
-                self.error_handler.handle_invalid_json(payload)
-        else:
+        try:
+            json.loads(payload)
+        except json.decoder.JSONDecodeError:
             self.error_handler.handle_invalid_json(payload)
+        decorated_payload = self._apply_decorators(payload)
+        for stream_name in stream_names:
+            try:
+                super().write_message([stream_name], decorated_payload,
+                                      max_attempts)
+            except MaxRetriesExceededException as e:
+                stream_name = e.args[0]
+                error_code = 'GENERR005'
+                error_description = 'Maximum retry attempts {0} exceed'\
+                    'for stream {1}'.format(max_attempts, stream_name)
+                self.error_handler.handle_error(
+                    decorated_payload, error_code, error_description)
 
     def handle_error(self, payload, error_code, error_description):
         """ Allows errors to be posted to the stream occurring from
@@ -131,3 +119,7 @@ class EnhancedKinesisClient(KinesisClient):
         :param error_description: Description Of Error
         """
         self.error_handler.handle_error(payload, error_code, error_description)
+
+
+
+

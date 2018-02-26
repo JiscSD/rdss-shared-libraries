@@ -31,3 +31,13 @@ class TestHistoryDecorator(object):
         msg_history = json_payload['messageHeader']['messageHistory'][0]
         for element in ['machineId', 'timestamp', 'machineAddress']:
             assert element in msg_history
+
+    def test_history_decorator_when_header_is_string(self, serialised_payload):
+        invalid_message = {
+            'messageHeader': 'should-be-dict'
+        }
+        decorated_payload = self.decorator.process(json.dumps(invalid_message))
+        json_payload = json.loads(decorated_payload)
+        msg_history = json_payload['messageHeader']['messageHistory'][0]
+        for element in ['machineId', 'timestamp', 'machineAddress']:
+            assert element in msg_history
