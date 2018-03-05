@@ -2,13 +2,14 @@ import time
 
 
 class StreamReader(object):
-    def __init__(self, client):
+    def __init__(self, client, read_interval):
         """
         Boto3 abstraction that reads from a Kinesis stream
         :param client: An instance of boto3 kinesis client
         :type client: botocore.client.Kinesis
         """
         self.client = client
+        self.read_interval = read_interval
 
     def read_stream(self, stream_name, seq_number=None):
         """Listen for messages from a stream and yield response.
@@ -34,7 +35,7 @@ class StreamReader(object):
             for record in records:
                 yield record
 
-            time.sleep(0.2)
+            time.sleep(self.read_interval)
             iterator = response['NextShardIterator']
 
     def _get_shard_id(self, stream_name):
@@ -66,7 +67,7 @@ class StreamReader(object):
             response = self.client.get_shard_iterator(
                 StreamName=stream_name,
                 ShardId=shard_id,
-                ShardIteratorType='AT_SEQUENCE_NUMBER',
+                ShardIteratorType='AFTER_SEQUENCE_NUMBER',
                 StartingSequenceNumber=seq_number
             )
         return response['ShardIterator']
