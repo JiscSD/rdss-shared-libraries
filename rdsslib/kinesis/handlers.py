@@ -40,7 +40,7 @@ class MessageErrorHandler(object):
             try:
                 payload_json = json.loads(payload)
             except ValueError:
-                self.handle_invalid_json(payload_json)
+                self.handle_invalid_json(payload)
                 return
 
             payload_json['messageHeader']['errorCode'] = error_code
