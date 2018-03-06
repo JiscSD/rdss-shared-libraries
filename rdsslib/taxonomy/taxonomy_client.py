@@ -98,10 +98,11 @@ class TaxonomyGitClient(TaxonomyClientBase):
     """Taxonomy API Client for use with files
      checked into a public git repository"""
 
-    def __init__(self, repo_url):
+    def __init__(self, repo_url, tag):
         self.repo_url = repo_url
         self.temp_reponame = TEMP_GIT_REPONAME
-        self._initclient()
+        self.tag = tag
+        self._initclient(self.tag)
 
     def _get_targetrepodir(self):
         current_dir = os.path.abspath(os.getcwd())
@@ -110,9 +111,11 @@ class TaxonomyGitClient(TaxonomyClientBase):
         )
         return temp_dir
 
-    def _initclient(self):
+    def _initclient(self, tag):
         temp_dir = self._get_targetrepodir()
-        Repo.clone_from(self.repo_url, temp_dir)
+        repo = Repo.clone_from(self.repo_url, temp_dir)
+        repo.head.reference = repo.commit(tag)
+        repo.head.reset(index=True, working_tree=True)
 
     def _get_filedir(self):
         current_dir = os.path.abspath(os.getcwd())

@@ -13,12 +13,12 @@ class TestTaxonomyClients(object):
     @pytest.fixture
     def client(self, monkeypatch):
         monkeypatch.setattr(TaxonomyGitClient, '_initclient', self.mock_clone)
-        client = TaxonomyGitClient('test_url')
+        client = TaxonomyGitClient('test_url', 'v0.1.0')
         yield client
         temp_path = os.path.join(os.getcwd(), TEMP_GIT_REPONAME)
         shutil.rmtree(temp_path)
 
-    def mock_clone(self):
+    def mock_clone(self, tag):
         json_content = {
             'vocabularyId': 2,
             'vocabularyName': 'checksumType',
