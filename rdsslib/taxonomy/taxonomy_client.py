@@ -5,6 +5,7 @@ TODO: Replace files with API once ready (RDSS-1239).
 
 import os
 import json
+import logging
 
 from git import Repo
 
@@ -98,30 +99,32 @@ class TaxonomyGitClient(TaxonomyClientBase):
     """Taxonomy API Client for use with files
      checked into a public git repository"""
 
-    def __init__(self, repo_url, tag):
+    def __init__(self, repo_url, tag, temp_dir):
         self.repo_url = repo_url
+        self.logger = logging.getLogger(__name__)
         self.temp_reponame = TEMP_GIT_REPONAME
         self.tag = tag
+        self.tempdirpath = temp_dir
         self._initclient(self.tag)
 
     def _get_targetrepodir(self):
-        current_dir = os.path.abspath(os.getcwd())
         temp_dir = os.path.join(
-            current_dir, self.temp_reponame
+            self.tempdirpath, self.temp_reponame
         )
         return temp_dir
 
     def _initclient(self, tag):
         temp_dir = self._get_targetrepodir()
+        self.logger.debug('Cloning repository into %s', temp_dir)
         repo = Repo.clone_from(self.repo_url, temp_dir)
         repo.head.reference = repo.commit(tag)
         repo.head.reset(index=True, working_tree=True)
 
     def _get_filedir(self):
-        current_dir = os.path.abspath(os.getcwd())
         temp_dir = os.path.join(
-            current_dir, self.temp_reponame, 'datamodels'
+            self.tempdirpath, self.temp_reponame, 'datamodels'
         )
+        self.logger.debug('Retrieving taxonomies from %s', temp_dir)
         return temp_dir
 
 
