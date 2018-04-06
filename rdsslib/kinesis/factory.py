@@ -10,6 +10,7 @@ from .writer import StreamWriter
 
 def kinesis_client_factory(
         client_type,
+        machine_id=None,
         invalid_stream_name='invalid_stream',
         error_stream_name='error_stream',
         read_interval=0.2):
@@ -33,5 +34,6 @@ def kinesis_client_factory(
                                       writer=writer)
         return EnhancedKinesisClient(writer=writer,
                                      reader=reader,
+                                     machine_id=machine_id,
                                      error_handler=handler,
                                      decorators=decorators)
