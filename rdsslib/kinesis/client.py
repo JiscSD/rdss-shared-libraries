@@ -46,7 +46,8 @@ class KinesisClient(object):
 
 
 class EnhancedKinesisClient(KinesisClient):
-    def __init__(self, writer, reader, error_handler, decorators=None):
+    def __init__(self, writer, reader, machine_id,
+                 error_handler, decorators=None):
         """
         Writes and reads messages to and from Kinesis streams with
         error handling and message decoration
@@ -65,6 +66,7 @@ class EnhancedKinesisClient(KinesisClient):
         else:
             self.decorators = []
         self.error_handler = error_handler
+        self.machine_id = machine_id
 
     def _apply_decorators(self, payload):
         """
@@ -78,7 +80,7 @@ class EnhancedKinesisClient(KinesisClient):
         decorated_payload = payload
         for decorator in self.decorators:
             try:
-                decorated_payload = decorator.process(payload)
+                decorated_payload = decorator.process(payload, self.machine_id)
             except Exception:
                 self.logger.warning(
                     'Failed to apply decorator {}'.format(decorator.name))

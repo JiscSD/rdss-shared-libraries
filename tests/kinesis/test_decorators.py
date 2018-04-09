@@ -26,7 +26,8 @@ class TestHistoryDecorator(object):
         return json.dumps(payload)
 
     def test_history_decorator(self, serialised_payload):
-        decorated_payload = self.decorator.process(serialised_payload)
+        decorated_payload = self.decorator.process(
+            serialised_payload, 'some-id')
         json_payload = json.loads(decorated_payload)
         msg_history = json_payload['messageHeader']['messageHistory'][0]
         for element in ['machineId', 'timestamp', 'machineAddress']:
@@ -36,7 +37,8 @@ class TestHistoryDecorator(object):
         invalid_message = {
             'messageHeader': 'should-be-dict'
         }
-        decorated_payload = self.decorator.process(json.dumps(invalid_message))
+        decorated_payload = self.decorator.process(
+            json.dumps(invalid_message), 'some-id')
         json_payload = json.loads(decorated_payload)
         msg_history = json_payload['messageHeader']['messageHistory'][0]
         for element in ['machineId', 'timestamp', 'machineAddress']:

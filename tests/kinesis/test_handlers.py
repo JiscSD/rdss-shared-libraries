@@ -42,6 +42,7 @@ class TestMessageErrorHandler(object):
                                                         serialised_payload):
         mock_client = EnhancedKinesisClient(None,
                                             None,
+                                            None,
                                             self.handler,
                                             None)
         error = 'Generated Test Message to Error'

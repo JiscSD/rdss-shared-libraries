@@ -12,7 +12,7 @@ class RouterHistoryDecorator(object):
     def name(self):
         return 'RouterHistoryDecorator'
 
-    def process(self, payload):
+    def process(self, payload, machine_id):
         """Decorates message's history header with details
         :param payload: JSON formatted payload
         :return: decorated JSON formatted payload
@@ -40,7 +40,7 @@ class RouterHistoryDecorator(object):
             machine_address = '0.0.0.0'
 
         history_element = {
-            'machineId': 'rdss-institutional-content-based-router',
+            'machineId': machine_id,
             'machineAddress': machine_address,
             'timestamp': datetime.now(tzlocal()).isoformat()
         }
