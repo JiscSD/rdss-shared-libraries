@@ -34,7 +34,7 @@ class RouterHistoryDecorator(object):
             history = []
 
         try:
-            machine_address = socket.gethostbyname(socket.gethostname())
+            machine_name = socket.gethostname()
         except (socket.gaierror, socket.herror):
             # Not sure what is best to express unknown: should pass validation
             machine_address = '0.0.0.0'
