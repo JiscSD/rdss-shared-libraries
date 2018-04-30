@@ -34,14 +34,15 @@ class RouterHistoryDecorator(object):
             history = []
 
         try:
+            # Get the hostname first
             machine_name = socket.gethostname()
         except (socket.gaierror, socket.herror):
             # Not sure what is best to express unknown: should pass validation
-            machine_address = '0.0.0.0'
+            machine_name = 'unknown'
 
         history_element = {
             'machineId': machine_id,
-            'machineAddress': machine_address,
+            'machineAddress': machine_name,
             'timestamp': datetime.now(tzlocal()).isoformat()
         }
 
