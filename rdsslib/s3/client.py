@@ -38,5 +38,5 @@ class S3Client(object):
             ContentMD5=md5_checksum,
             Metadata={
                 'md5chksum': md5_checksum
-                }
+            }
         )

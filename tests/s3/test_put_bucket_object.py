@@ -14,13 +14,16 @@ def client():
 def boto3_client():
     return boto3.client('s3')
 
+
 @pytest.fixture()
 def sample_text():
     return 'sample'
 
+
 @pytest.fixture()
 def sample_md5():
     return 'Xo/5v1W6NQgZnSLphBKb5g=='
+
 
 def create_test_bucket(name='test'):
     """ Create a test S3 bucket."""
