@@ -41,5 +41,5 @@ def test_put_bucket_object(client, boto3_client, sample_text, sample_md5):
     )
     response_md5 = item['ResponseMetadata']['HTTPHeaders']['Content-MD5']
 
-    assert item['Body'].read().decode('utf-8') == 'sample'
+    assert item['Body'].read().decode('utf-8') == sample_text
     assert response_md5 == sample_md5
