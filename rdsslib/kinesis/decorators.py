@@ -35,9 +35,7 @@ class RouterHistoryDecorator(object):
 
         try:
             # Get the hostname first
-            # See RDSS-2088
-            # machine_name = socket.gethostname()
-            machine_name = 'temporary.example'
+            machine_name = socket.gethostname()
         except (socket.gaierror, socket.herror):
             # Not sure what is best to express unknown: should pass validation
             machine_name = 'unknown'
