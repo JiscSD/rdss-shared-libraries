@@ -33,7 +33,7 @@ env: ## Create local Python virtualenv
 	@python -m venv env
 
 test: ## Run tests
-	@pytest
+	@pytest --cov-branch --cov-report=xml --cov=.
 
 lint: ## Run lint on all files
 	@pre-commit run \

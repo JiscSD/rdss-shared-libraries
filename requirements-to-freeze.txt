@@ -1,4 +1,6 @@
 boto3
+coverage
 moto
 pre-commit
 pytest
+pytest-cov
